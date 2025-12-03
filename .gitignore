@@ -1,12 +1,104 @@
-# Byte-compiled / optimized / DLL files
+# Создано с помощью https://www.toptal.com/developers/gitignore/api/python,pycharm+all
+# Отредактируйте на https://www.toptal.com/developers/gitignore?templates=python,pycharm+all
+
+### PyCharm+all ###
+# Подходит для IDE JetBrains: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm и Rider
+# Ссылка: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# Пользовательские настройки
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# Пользовательские настройки AWS
+.idea/**/aws.xml
+
+# Сгенерированные файлы
+.idea/**/contentModel.xml
+
+# Конфиденциальные файлы или файлы с высокой частотой обращения
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# Gradle и Maven с автоматическим импортом
+# При использовании Gradle или Maven с автоматическим импортом вам следует исключить файлы модуля, 
+# поскольку они будут создаваться заново и могут вызвать отток. Раскомментируйте, если используете
+# автоматический импорт.
+# .идея / артефакты
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
+# .idea/modules.xml
+# .идея / *.iml
+# .идея / модули
+# *.iml
+# *.ipr
+
+# CMake
+cmake-build-*/
+
+# Плагин Mongo Explorer
+.idea/**/mongoSettings.xml
+
+# Формат проекта на основе файлов
+*.iws
+
+# IntelliJ
+out/
+
+# Плагин mpeltonen/sbt-idea
+.idea_modules/
+
+# Плагин JIRA
+atlassian-ide-plugin.xml
+
+# Плагин Cursive Clojure
+.idea/replstate.xml
+
+# Плагин SonarLint
+.idea/sonarlint/
+
+# Плагин Crashlytics (для Android Studio и IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Клиент Rest на основе редактора
+.idea/httpRequests
+
+# Сериализованный файл кэша Android Studio 3.1+
+.idea/caches/build_file_checksums.ser
+
+### Патч для PyCharm+all ###
+# Игнорировать все, кроме настроек стиля кода и конфигураций запуска
+# которые должны быть общими для всех команд.
+
+.idea/*
+
+!.idea/codeStyles
+!.idea/runConfigurations
+
+### Python ###
+# Байт-компилированные / оптимизированные / DLL-файлы
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# Расширения C
 *.so
 
-# Distribution / packaging
+# Распространение / упаковка
 .Python
 build/
 develop-eggs/
@@ -27,16 +119,16 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+# Обычно эти файлы создаются с помощью скрипта Python на основе шаблона
+# перед тем как PyInstaller соберет исполняемый файл, в него добавляются дата и другая информация.
 *.manifest
 *.spec
 
-# Installer logs
+# Журналы установщика
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Отчеты о модульных тестах / покрытии кода
 htmlcov/
 .tox/
 .nox/
@@ -51,24 +143,24 @@ coverage.xml
 .pytest_cache/
 cover/
 
-# Translations
+# Переводы
 *.mo
 *.pot
 
-# Django stuff:
+# Django-related:
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
-# Flask stuff:
+# Flask-related:
 instance/
 .webassets-cache
 
-# Scrapy stuff:
+# Scrapy-related:
 .scrapy
 
-# Sphinx documentation
+# Документация Sphinx
 docs/_build/
 
 # PyBuilder
@@ -83,51 +175,43 @@ profile_default/
 ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
+# Если речь идёт о библиотеке или пакете, вы можете проигнорировать эти файлы, поскольку код
+# предназначен для работы в нескольких средах; в противном случае добавьте их в:
 # .python-version
 
 # pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
+# Согласно pypa/pipenv#598, рекомендуется включать Pipfile.lock в систему контроля версий.
+# Однако, в случае совместной работы, при наличии зависимостей от конкретной платформы или dependencies
+# при отсутствии кроссплатформенной поддержки pipenv может установить зависимости, которые не работают, или нет
+# установите все необходимые зависимости.
+#Pipfile.блокировка
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
+# поэзия
+# Аналогично Pipfile.lock , обычно рекомендуется включать poetry.lock в системе управления версиями.
+# Это особенно рекомендуется для двоичных пакетов для обеспечения воспроизводимости и чаще всего игнорируется для библиотек.
+#
+# https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#поэзия.блокировка
 
 # pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+# Похоже на Pipfile.Для блокировки обычно рекомендуется включать pdm.lock в систему контроля версий. 
 #pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
+# pdm хранит общесистемные конфигурации в .pdm.toml, но рекомендуется не включать его
+# в систему контроля версий. 
+# https://pdm.fming.dev/#use-with-ide
 .pdm.toml
-.pdm-python
-.pdm-build/
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+# PEP 582; используется, например, на github.com/David-OConnor/pyflow и github.com/pdm-project/pdm
 __pypackages__/
 
-# Celery stuff
+# Файлы Celery
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# Файлы, обработанные SageMath
 *.sage.py
 
-# Environments
+# Среды
 .env
 .venv
 env/
@@ -136,14 +220,14 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
+# Настройки проекта Spyder
 .spyderproject
 .spyproject
 
-# Rope project settings
+# Настройки проекта Rope
 .ropeproject
 
-# mkdocs documentation
+# Документация mkdocs
 /site
 
 # mypy
@@ -151,31 +235,30 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# Pyre type checker
+# Средство проверки типов Pyre
 .pyre/
 
-# pytype static type analyzer
+# Статический анализатор типов pytype
 .pytype/
 
-# Cython debug symbols
+# Отладочные символы Cython
 cython_debug/
 
 # PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+# Шаблон, специфичный для JetBrains, хранится в отдельном файле JetBrains.gitignore, который можно
+# найти по адресу https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+# и добавить в глобальный файл gitignore или объединить с этим файлом. Для более радикального
+# варианта (не рекомендуется) можно раскомментировать следующую строку, чтобы игнорировать всю папку idea.
 #.idea/
 
-# Ruff stuff:
+### Исправление для Python ###
+# Файл локальной конфигурации Poetry — https://python-poetry.org/docs/configuration/#local-configuration
+poetry.toml
+
+# ruff
 .ruff_cache/
 
-# PyPI configuration file
-.pypirc
+# Файлы конфигурации LSP
+pyrightconfig.json
 
-# Cursor  
-#  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to 
-#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
-#  refer to https://docs.cursor.com/context/ignore-files
-.cursorignore
-.cursorindexingignore
+# Конец https://www.toptal.com/developers/gitignore/api/python,pycharm+all
