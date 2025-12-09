@@ -1,6 +1,7 @@
+# handlers/notes_flow.py
 from aiogram import types
-from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 from db import requests as dbreq
 from keyboards.main_keyboards import note_period_keyboard, back_to_main_keyboard
 

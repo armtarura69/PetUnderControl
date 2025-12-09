@@ -1,7 +1,11 @@
+# bot.py
 import logging
 import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.filters import Command, StateFilter
+from aiogram import F
+
 from config import BOT_TOKEN
 from db.requests import init_db
 
@@ -28,50 +32,50 @@ dp = Dispatcher(storage=MemoryStorage())
 # Инициализация БД
 init_db()
 
-# Команды
-dp.message.register(cmd_start, commands=["start"])
-dp.message.register(cmd_inline, commands=["inline"])
+# --- РЕГИСТРАЦИЯ ХЕНДЛЕРОВ ---
 
-# Общая маршрутизация текста
-dp.message.register(on_text_profile, types.ContentType.TEXT)
+# 1. Сначала регистрируем команды
+dp.message.register(cmd_start, Command(commands=["start"]))
+dp.message.register(cmd_inline, Command(commands=["inline"]))
 
-# Поток добавления питомца
+# 2. Затем конкретные текстовые команды (Flow добавления питомца)
 dp.message.register(
     start_add_pet,
-    lambda msg: msg.text and msg.text.lower() == "добавить питомца",
-    types.ContentType.TEXT
+    F.text.lower() == "добавить питомца"
 )
-dp.message.register(pet_breed, pet_flow.PetStates.waiting_breed, types.ContentType.TEXT)
-dp.message.register(pet_name, pet_flow.PetStates.waiting_name, types.ContentType.TEXT)
-dp.message.register(pet_age, pet_flow.PetStates.waiting_age, types.ContentType.TEXT)
-dp.message.register(pet_extra, pet_flow.PetStates.waiting_extra, types.ContentType.TEXT)
-dp.message.register(pet_confirm, pet_flow.PetStates.confirm, types.ContentType.TEXT)
+# Состояния передаем позиционно, без "state=". F.text заменяет content_types
+dp.message.register(pet_breed, pet_flow.PetStates.waiting_breed, F.text)
+dp.message.register(pet_name, pet_flow.PetStates.waiting_name, F.text)
+dp.message.register(pet_age, pet_flow.PetStates.waiting_age, F.text)
+dp.message.register(pet_extra, pet_flow.PetStates.waiting_extra, F.text)
+dp.message.register(pet_confirm, pet_flow.PetStates.confirm, F.text)
 
-# Редактирование питомца
+# 3. Flow редактирования питомца
 dp.message.register(
     start_edit_pet,
-    lambda msg: msg.text and msg.text.lower() == "изменить информацию о питомце",
-    types.ContentType.TEXT
+    F.text.lower() == "изменить информацию о питомце"
 )
-dp.message.register(choose_pet_to_edit, state="waiting_choose_pet", content_types=types.ContentType.TEXT)
-dp.message.register(field_choice, state="waiting_field_choice", content_types=types.ContentType.TEXT)
-dp.message.register(new_value_input, state="waiting_new_value", content_types=types.ContentType.TEXT)
+dp.message.register(choose_pet_to_edit, pet_flow.EditPetStates.waiting_choose_pet, F.text)
+dp.message.register(field_choice, pet_flow.EditPetStates.waiting_field_choice, F.text)
+dp.message.register(new_value_input, pet_flow.EditPetStates.waiting_new_value, F.text)
 
-# Заметки
+# 4. Flow заметок
 dp.message.register(
     start_notes,
-    lambda msg: msg.text and msg.text.lower() == "заметки",
-    types.ContentType.TEXT
+    F.text.lower() == "заметки"
 )
 dp.message.register(
     start_add_note,
-    lambda msg: msg.text and msg.text.lower() == "добавить заметку",
-    types.ContentType.TEXT
+    F.text.lower() == "добавить заметку"
 )
-dp.message.register(choose_pet_for_note, notes_flow.NoteStates.choose_pet, types.ContentType.TEXT)
-dp.message.register(note_title, notes_flow.NoteStates.waiting_title, types.ContentType.TEXT)
-dp.message.register(note_period, notes_flow.NoteStates.waiting_period, types.ContentType.TEXT)
-dp.message.register(note_extra, notes_flow.NoteStates.waiting_extra, types.ContentType.TEXT)
+dp.message.register(choose_pet_for_note, notes_flow.NoteStates.choose_pet, F.text)
+dp.message.register(note_title, notes_flow.NoteStates.waiting_title, F.text)
+dp.message.register(note_period, notes_flow.NoteStates.waiting_period, F.text)
+dp.message.register(note_extra, notes_flow.NoteStates.waiting_extra, F.text)
+
+# 5. В САМОМ КОНЦЕ регистрируем общий обработчик текста
+# Если поставить его выше, он будет перехватывать команды "добавить питомца" и т.д.
+dp.message.register(on_text_profile, F.text)
 
 async def main():
     await dp.start_polling(bot)

@@ -1,7 +1,7 @@
+# handlers/profile.py
 from aiogram import types
-from aiogram.dispatcher import Dispatcher
 from db import requests as dbreq
-from keyboards.main_keyboards import profile_options_keyboard, back_to_main_keyboard
+from keyboards.main_keyboards import profile_options_keyboard, back_to_main_keyboard, main_reply_keyboard
 from utils.helpers import make_response_ok, make_response_error
 
 async def on_text_profile(message: types.Message):

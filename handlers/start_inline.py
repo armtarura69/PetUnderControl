@@ -1,5 +1,5 @@
+# handlers/start_inline.py
 from aiogram import types
-from aiogram.dispatcher import Dispatcher
 from db import requests as dbreq
 from keyboards.main_keyboards import main_reply_keyboard
 from utils.helpers import make_response_ok
@@ -25,7 +25,7 @@ async def cmd_inline(message: types.Message):
     # отправляем ссылки (пример формата JSON-ответа)
     inline_links = [
         {"title": "Документация по кошкам", "url": "https://example.com/cats"},
-        {"title": "Документация по собакам", "url": "https://example.com/dogs"},
+        {"title": "Документация по собаками", "url": "https://example.com/dogs"},
     ]
     # также отправим inline-клавиатуру с ссылками
     kb = types.InlineKeyboardMarkup()
