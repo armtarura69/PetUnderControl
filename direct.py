@@ -7,11 +7,11 @@ file_dict = {
     'models.py': 'db/models.py',
     'requests.py': 'db/requests.py',
 
+    'hinit.py': 'handlers/__init__.py',
+    'start_inline.py': 'handlers/start_inline.py',
     'notes_flow.py': 'handlers/notes_flow.py',
     'pet_flow.py': 'handlers/pet_flow.py',
     'profile.py': 'handlers/profile.py',
-
-    'start_inline.py': 'handlers/start_inline.py',
 
     'main_keyboards.py': 'keyboards/main_keyboards.py',
 

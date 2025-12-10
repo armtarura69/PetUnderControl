@@ -1,8 +1,8 @@
-# handlers/profile.py
 from aiogram import types
 from db import requests as dbreq
 from keyboards.main_keyboards import profile_options_keyboard, back_to_main_keyboard, main_reply_keyboard
 from utils.helpers import make_response_ok, make_response_error
+
 
 async def on_text_profile(message: types.Message):
     text = message.text.lower()
@@ -22,7 +22,6 @@ async def on_text_profile(message: types.Message):
         pets = pets_resp["data"]["pets"]
         if not pets:
             await message.answer("пока нет животных", reply_markup=back_to_main_keyboard())
-            await message.answer("Валидация: у пользователя нет питомцев. Следующий шаг: добавьте питомца через «добавить питомца».")
             return
         # формируем вывод
         text_out = "Питомцы:\n\n"
@@ -35,6 +34,5 @@ async def on_text_profile(message: types.Message):
                 f"Создан: {p['created_at']}\n\n"
             )
         await message.answer(text_out, reply_markup=back_to_main_keyboard())
-        await message.answer("Валидация: успешно получены и отображены питомцы. Следующий шаг: выберите питомца для изменения, если нужно.")
     elif text == "на главную":
         await message.answer("Возвращаем на главную", reply_markup=main_reply_keyboard())

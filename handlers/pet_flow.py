@@ -1,10 +1,10 @@
-# handlers/pet_flow.py
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from db import requests as dbreq
 from keyboards.main_keyboards import pet_confirm_keyboard, back_to_main_keyboard
 import re
+
 
 class PetStates(StatesGroup):
     waiting_breed = State()
@@ -13,10 +13,12 @@ class PetStates(StatesGroup):
     waiting_extra = State()
     confirm = State()
 
+
 class EditPetStates(StatesGroup):
     waiting_choose_pet = State()
     waiting_field_choice = State()
     waiting_new_value = State()
+
 
 async def start_add_pet(message: types.Message, state: FSMContext):
     if message.text.lower() != "добавить питомца":
@@ -24,10 +26,12 @@ async def start_add_pet(message: types.Message, state: FSMContext):
     await message.answer("Введите породу питомца:", reply_markup=back_to_main_keyboard())
     await state.set_state(PetStates.waiting_breed)
 
+
 async def pet_breed(message: types.Message, state: FSMContext):
     await state.update_data(breed=message.text.strip())
     await message.answer("Введите кличку питомца:")
     await state.set_state(PetStates.waiting_name)
+
 
 async def pet_name(message: types.Message, state: FSMContext):
     name = message.text.strip()
@@ -38,6 +42,7 @@ async def pet_name(message: types.Message, state: FSMContext):
     await message.answer("Введите возраст (строкой):")
     await state.set_state(PetStates.waiting_age)
 
+
 async def pet_age(message: types.Message, state: FSMContext):
     age = message.text.strip()
     if not age:
@@ -47,6 +52,7 @@ async def pet_age(message: types.Message, state: FSMContext):
     await message.answer("Введите доп. информацию (или напишите «нет»):")
     await state.set_state(PetStates.waiting_extra)
 
+
 async def pet_extra(message: types.Message, state: FSMContext):
     extra = message.text.strip()
     if extra.lower() == "нет":
@@ -54,13 +60,14 @@ async def pet_extra(message: types.Message, state: FSMContext):
     await state.update_data(extra_info=extra)
     data = await state.get_data()
     summary = (
-        f"Порода: {data.get('breed','')}\n"
-        f"Кличка: {data.get('name','')}\n"
-        f"Возраст: {data.get('age','')}\n"
-        f"Доп. информация: {data.get('extra_info','') or ''}"
+        f"Порода: {data.get('breed', '')}\n"
+        f"Кличка: {data.get('name', '')}\n"
+        f"Возраст: {data.get('age', '')}\n"
+        f"Доп. информация: {data.get('extra_info', '') or ''}"
     )
     await message.answer("Подтвердите данные:\n\n" + summary, reply_markup=pet_confirm_keyboard())
     await state.set_state(PetStates.confirm)
+
 
 async def pet_confirm(message: types.Message, state: FSMContext):
     text = message.text.lower()
@@ -69,30 +76,30 @@ async def pet_confirm(message: types.Message, state: FSMContext):
         user_resp = await dbreq.get_or_create_user(message.from_user.id)
         if user_resp["status"] != "ok":
             await message.answer("Ошибка при нахождении профиля: " + user_resp.get("error_msg", ""))
-            await state.finish()
+            await state.clear()
             return
         user_id = user_resp["data"]["user"]["id"]
         create_resp = await dbreq.create_pet(
             user_id=user_id,
-            breed=data.get("breed",""),
-            name=data.get("name",""),
-            age=data.get("age",""),
+            breed=data.get("breed", ""),
+            name=data.get("name", ""),
+            age=data.get("age", ""),
             extra_info=data.get("extra_info")
         )
         if create_resp["status"] == "ok":
             pet = create_resp["data"]["pet"]
             await message.answer("питомец добавлен в профиль", reply_markup=back_to_main_keyboard())
-            await message.answer(f"Валидация: питомец '{pet['name']}' успешно добавлен. Следующий шаг: смотреть профиль или добавить заметку.")
         else:
             await message.answer("Ошибка при добавлении питомца: " + create_resp.get("error_msg", ""))
-        await state.finish()
+        await state.clear()
     elif text == "изменить":
         await state.update_data(await state.get_data())
         await message.answer("Введите породу заново:")
         await state.set_state(PetStates.waiting_breed)
     else:
         await message.answer("Операция отменена.", reply_markup=back_to_main_keyboard())
-        await state.finish()
+        await state.clear()
+
 
 # Редактирование питомца
 async def start_edit_pet(message: types.Message, state: FSMContext):
@@ -114,10 +121,11 @@ async def start_edit_pet(message: types.Message, state: FSMContext):
     await message.answer("Выберите кличку питомца для изменения:", reply_markup=kb)
     await state.set_state(EditPetStates.waiting_choose_pet)
 
+
 async def choose_pet_to_edit(message: types.Message, state: FSMContext):
     if message.text.lower() == "отмена":
         await message.answer("Отмена.", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
-        await state.finish()
+        await state.clear()
         return
     selected_name = message.text.strip()
     user_resp = await dbreq.get_user_by_telegram(message.from_user.id)
@@ -141,11 +149,12 @@ async def choose_pet_to_edit(message: types.Message, state: FSMContext):
     await message.answer("Выберите поле для изменения:", reply_markup=kb)
     await state.set_state(EditPetStates.waiting_field_choice)
 
+
 async def field_choice(message: types.Message, state: FSMContext):
     text = message.text.lower()
     if text == "отмена":
         await message.answer("Отмена.", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
-        await state.finish()
+        await state.clear()
         return
     mapping = {"порода": "breed", "кличка": "name", "возраст": "age", "доп. информация": "extra_info"}
     if text not in mapping:
@@ -154,6 +163,7 @@ async def field_choice(message: types.Message, state: FSMContext):
     await state.update_data(edit_field=mapping[text])
     await message.answer(f"Введите новое значение для {text}:")
     await state.set_state(EditPetStates.waiting_new_value)
+
 
 async def new_value_input(message: types.Message, state: FSMContext):
     data = await state.get_data()
@@ -165,8 +175,8 @@ async def new_value_input(message: types.Message, state: FSMContext):
         return
     resp = await dbreq.update_pet_field(pet_id, field, value)
     if resp["status"] == "ok":
-        await message.answer("Информация обновлена.", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
-        await message.answer("Валидация: поле обновлено успешно. Следующий шаг: проверить профиль.")
+        await message.answer("Информация обновлена.",
+                             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
     else:
         await message.answer("Ошибка при обновлении: " + resp.get("error_msg", ""))
-    await state.finish()
+    await state.clear()

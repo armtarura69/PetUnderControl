@@ -10,13 +10,9 @@ async def cmd_start(message: types.Message):
     resp = await dbreq.get_or_create_user(message.from_user.id)
     if resp["status"] == "ok":
         await message.answer(
-            "Привет! Этот бот — школьный проект для управления информацией о питомцах.\n\n"
-            "Быстрые кнопки: «о нас», «профиль», «заметки».",
+            "Привет! Этот бот — школьный проект для управления информацией о питомцах.",
             reply_markup=main_reply_keyboard()
         )
-        # краткая валидация результата + следующий шаг
-        await message.answer(
-            f"Валидация: профиль {'создан' if resp['status'] == 'ok' else 'не создан'}. Следующий шаг: выберите пункт меню.")
     else:
         await message.answer("Ошибка при создании профиля: " + resp.get("error_msg", "unknown"))
 

@@ -16,7 +16,7 @@ def main_reply_keyboard() -> types.ReplyKeyboardMarkup:
 def back_to_main_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
-            [types.KeyboardButton(text="на главную")],
+            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )
@@ -26,10 +26,10 @@ def back_to_main_keyboard() -> types.ReplyKeyboardMarkup:
 def profile_options_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
-            [types.KeyboardButton(text="посмотреть профиль")],
-            [types.KeyboardButton(text="добавить питомца")],
+            [types.KeyboardButton(text="Посмотреть профиль")],
+            [types.KeyboardButton(text="Добавить питомца")],
             [types.KeyboardButton(text="изменить информацию о питомце")],
-            [types.KeyboardButton(text="на главную")],
+            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )
@@ -39,9 +39,9 @@ def profile_options_keyboard() -> types.ReplyKeyboardMarkup:
 def pet_confirm_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
-            [types.KeyboardButton(text="все верно")],
-            [types.KeyboardButton(text="изменить")],
-            [types.KeyboardButton(text="отмена")],
+            [types.KeyboardButton(text="Все верно")],
+            [types.KeyboardButton(text="Изменить")],
+            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )
@@ -54,10 +54,10 @@ def note_period_keyboard() -> types.ReplyKeyboardMarkup:
             [types.KeyboardButton(text="не повторять")],
             [types.KeyboardButton(text="6 ч")],
             [types.KeyboardButton(text="день")],
-            [types.KeyboardButton(text="неделя")],
+            [types.KeyboardButton(text="Неделя")],
             [types.KeyboardButton(text="месяц")],
-            [types.KeyboardButton(text="год")],
-            [types.KeyboardButton(text="отмена")],
+            [types.KeyboardButton(text="Год")],
+            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )
