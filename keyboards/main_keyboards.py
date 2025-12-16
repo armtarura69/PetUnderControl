@@ -6,7 +6,7 @@ def main_reply_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
             [types.KeyboardButton(text="О нас"), types.KeyboardButton(text="Профиль")],
-            [types.KeyboardButton(text="Заметки"), types.KeyboardButton(text="Добавить питомца")],
+            [types.KeyboardButton(text="Заметки")],
         ],
         resize_keyboard=True
     )
@@ -16,11 +16,12 @@ def main_reply_keyboard() -> types.ReplyKeyboardMarkup:
 def back_to_main_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
-            [types.KeyboardButton(text="Отмена")],
+            [types.KeyboardButton(text="На главную")],
         ],
         resize_keyboard=True
     )
     return kb
+
 
 
 def profile_options_keyboard() -> types.ReplyKeyboardMarkup:
@@ -28,8 +29,7 @@ def profile_options_keyboard() -> types.ReplyKeyboardMarkup:
         keyboard=[
             [types.KeyboardButton(text="Посмотреть профиль")],
             [types.KeyboardButton(text="Добавить питомца")],
-            [types.KeyboardButton(text="изменить информацию о питомце")],
-            [types.KeyboardButton(text="Отмена")],
+            [types.KeyboardButton(text="На главную")],
         ],
         resize_keyboard=True
     )
@@ -41,7 +41,6 @@ def pet_confirm_keyboard() -> types.ReplyKeyboardMarkup:
         keyboard=[
             [types.KeyboardButton(text="Все верно")],
             [types.KeyboardButton(text="Изменить")],
-            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )
@@ -51,13 +50,12 @@ def pet_confirm_keyboard() -> types.ReplyKeyboardMarkup:
 def note_period_keyboard() -> types.ReplyKeyboardMarkup:
     kb = types.ReplyKeyboardMarkup(
         keyboard=[
-            [types.KeyboardButton(text="не повторять")],
+            [types.KeyboardButton(text="Не повторять")],
             [types.KeyboardButton(text="6 ч")],
-            [types.KeyboardButton(text="день")],
+            [types.KeyboardButton(text="День")],
             [types.KeyboardButton(text="Неделя")],
-            [types.KeyboardButton(text="месяц")],
+            [types.KeyboardButton(text="Месяц")],
             [types.KeyboardButton(text="Год")],
-            [types.KeyboardButton(text="Отмена")],
         ],
         resize_keyboard=True
     )

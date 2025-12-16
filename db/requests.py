@@ -157,7 +157,7 @@ def list_notes_for_pet_sync(pet_id: int):
 def create_note_sync(pet_id: int, title: str, period: str, extra_info: str = None):
     if not (title and period):
         return make_response_error("Обязательные поля для заметки не заполнены (title, period).")
-    valid_periods = {"не повторять", "6 ч", "день", "неделя", "месяц", "год"}
+    valid_periods = {"Не повторять", "6 ч", "День", "Неделя", "Месяц", "Год"}
     if period not in valid_periods:
         return make_response_error("Неправильная периодичность. Выберите одну из: " + ", ".join(valid_periods))
     session = SessionLocal()
@@ -206,7 +206,7 @@ def update_note_field_sync(note_id: int, field: str, value: str):
         if not note:
             return make_response_error("Заметка не найдена")
         if field == "period":
-            valid_periods = {"не повторять", "6 ч", "день", "неделя", "месяц", "год"}
+            valid_periods = {"Не повторять", "6 ч", "День", "Неделя", "Месяц", "Год"}
             if value not in valid_periods:
                 return make_response_error("Неправильная периодичность.")
         setattr(note, field, value)

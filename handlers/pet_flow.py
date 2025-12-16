@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from db import requests as dbreq
+from keyboards.main_keyboards import main_reply_keyboard
 from keyboards.main_keyboards import pet_confirm_keyboard, back_to_main_keyboard
 import re
 
@@ -23,13 +24,13 @@ class EditPetStates(StatesGroup):
 async def start_add_pet(message: types.Message, state: FSMContext):
     if message.text.lower() != "добавить питомца":
         return
-    await message.answer("Введите породу питомца:", reply_markup=back_to_main_keyboard())
+    await message.answer("Введите породу питомца:", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(PetStates.waiting_breed)
 
 
 async def pet_breed(message: types.Message, state: FSMContext):
     await state.update_data(breed=message.text.strip())
-    await message.answer("Введите кличку питомца:")
+    await message.answer("Введите кличку питомца:",reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(PetStates.waiting_name)
 
 
@@ -39,7 +40,7 @@ async def pet_name(message: types.Message, state: FSMContext):
         await message.answer("Кличка не может быть пустой. Введите кличку:")
         return
     await state.update_data(name=name)
-    await message.answer("Введите возраст (строкой):")
+    await message.answer("Введите возраст:", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(PetStates.waiting_age)
 
 
@@ -49,7 +50,7 @@ async def pet_age(message: types.Message, state: FSMContext):
         await message.answer("Возраст обязателен. Введите возраст:")
         return
     await state.update_data(age=age)
-    await message.answer("Введите доп. информацию (или напишите «нет»):")
+    await message.answer("Введите доп. информацию (или напишите «Нет»):", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(PetStates.waiting_extra)
 
 
@@ -88,13 +89,22 @@ async def pet_confirm(message: types.Message, state: FSMContext):
         )
         if create_resp["status"] == "ok":
             pet = create_resp["data"]["pet"]
-            await message.answer("питомец добавлен в профиль", reply_markup=back_to_main_keyboard())
+            await message.answer("Питомец добавлен 🐾")
+            await message.answer(
+                "Главное меню:",
+                reply_markup=main_reply_keyboard()
+            )
+
         else:
             await message.answer("Ошибка при добавлении питомца: " + create_resp.get("error_msg", ""))
+            await message.answer(
+                "Главное меню:",
+                reply_markup=main_reply_keyboard()
+            )
         await state.clear()
     elif text == "изменить":
         await state.update_data(await state.get_data())
-        await message.answer("Введите породу заново:")
+        await message.answer("Введите породу заново:",  reply_markup=types.ReplyKeyboardRemove())
         await state.set_state(PetStates.waiting_breed)
     else:
         await message.answer("Операция отменена.", reply_markup=back_to_main_keyboard())
@@ -117,16 +127,12 @@ async def start_edit_pet(message: types.Message, state: FSMContext):
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
     for p in pets_resp["data"]["pets"]:
         kb.add(types.KeyboardButton(p["name"]))
-    kb.add(types.KeyboardButton("отмена"))
+    kb.add(types.KeyboardButton("Отмена"))
     await message.answer("Выберите кличку питомца для изменения:", reply_markup=kb)
     await state.set_state(EditPetStates.waiting_choose_pet)
 
 
 async def choose_pet_to_edit(message: types.Message, state: FSMContext):
-    if message.text.lower() == "отмена":
-        await message.answer("Отмена.", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
-        await state.clear()
-        return
     selected_name = message.text.strip()
     user_resp = await dbreq.get_user_by_telegram(message.from_user.id)
     user_id = user_resp["data"]["user"]["id"]
@@ -141,27 +147,27 @@ async def choose_pet_to_edit(message: types.Message, state: FSMContext):
         return
     await state.update_data(edit_pet_id=pet["id"])
     kb = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    kb.add(types.KeyboardButton("порода"))
-    kb.add(types.KeyboardButton("кличка"))
-    kb.add(types.KeyboardButton("возраст"))
-    kb.add(types.KeyboardButton("доп. информация"))
-    kb.add(types.KeyboardButton("отмена"))
+    kb.add(types.KeyboardButton("Порода"))
+    kb.add(types.KeyboardButton("Кличка"))
+    kb.add(types.KeyboardButton("Возраст"))
+    kb.add(types.KeyboardButton("Доп. информация"))
+    kb.add(types.KeyboardButton("На главную"))
     await message.answer("Выберите поле для изменения:", reply_markup=kb)
     await state.set_state(EditPetStates.waiting_field_choice)
 
 
 async def field_choice(message: types.Message, state: FSMContext):
     text = message.text.lower()
-    if text == "отмена":
-        await message.answer("Отмена.", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
+    if text == "на главную":
+        await message.answer("На главную", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
         await state.clear()
         return
-    mapping = {"порода": "breed", "кличка": "name", "возраст": "age", "доп. информация": "extra_info"}
+    mapping = {"Порода": "breed", "Кличка": "name", "Возраст": "age", "Доп. информация": "extra_info"}
     if text not in mapping:
         await message.answer("Неизвестное поле. Выберите снова.")
         return
     await state.update_data(edit_field=mapping[text])
-    await message.answer(f"Введите новое значение для {text}:")
+    await message.answer(f"Введите новое значение для {text}:",  reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(EditPetStates.waiting_new_value)
 
 
@@ -176,7 +182,7 @@ async def new_value_input(message: types.Message, state: FSMContext):
     resp = await dbreq.update_pet_field(pet_id, field, value)
     if resp["status"] == "ok":
         await message.answer("Информация обновлена.",
-                             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
+                             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("На главную"))
     else:
         await message.answer("Ошибка при обновлении: " + resp.get("error_msg", ""))
     await state.clear()
