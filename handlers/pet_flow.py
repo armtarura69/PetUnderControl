@@ -30,7 +30,7 @@ async def start_add_pet(message: types.Message, state: FSMContext):
 
 async def pet_breed(message: types.Message, state: FSMContext):
     await state.update_data(breed=message.text.strip())
-    await message.answer("Введите кличку питомца:",reply_markup=types.ReplyKeyboardRemove())
+    await message.answer("Введите кличку питомца:", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(PetStates.waiting_name)
 
 
@@ -104,14 +104,13 @@ async def pet_confirm(message: types.Message, state: FSMContext):
         await state.clear()
     elif text == "изменить":
         await state.update_data(await state.get_data())
-        await message.answer("Введите породу заново:",  reply_markup=types.ReplyKeyboardRemove())
+        await message.answer("Введите породу заново:", reply_markup=types.ReplyKeyboardRemove())
         await state.set_state(PetStates.waiting_breed)
     else:
         await message.answer("Операция отменена.", reply_markup=back_to_main_keyboard())
         await state.clear()
 
 
-# Редактирование питомца
 async def start_edit_pet(message: types.Message, state: FSMContext):
     if message.text.lower() != "изменить информацию о питомце":
         return
@@ -159,7 +158,8 @@ async def choose_pet_to_edit(message: types.Message, state: FSMContext):
 async def field_choice(message: types.Message, state: FSMContext):
     text = message.text.lower()
     if text == "на главную":
-        await message.answer("На главную", reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
+        await message.answer("На главную",
+                             reply_markup=types.ReplyKeyboardMarkup(resize_keyboard=True).add("на главную"))
         await state.clear()
         return
     mapping = {"Порода": "breed", "Кличка": "name", "Возраст": "age", "Доп. информация": "extra_info"}
@@ -167,7 +167,7 @@ async def field_choice(message: types.Message, state: FSMContext):
         await message.answer("Неизвестное поле. Выберите снова.")
         return
     await state.update_data(edit_field=mapping[text])
-    await message.answer(f"Введите новое значение для {text}:",  reply_markup=types.ReplyKeyboardRemove())
+    await message.answer(f"Введите новое значение для {text}:", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(EditPetStates.waiting_new_value)
 
 

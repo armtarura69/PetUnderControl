@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.fsm.context import FSMContext
 from keyboards.main_keyboards import back_to_main_keyboard
 
+
 async def about_project(message: types.Message, state: FSMContext):
     await state.clear()
 

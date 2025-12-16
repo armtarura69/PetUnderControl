@@ -1,4 +1,3 @@
-# handlers/notes_flow.py
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -18,6 +17,7 @@ class NoteStates(StatesGroup):
     waiting_extra = State()
     confirm = State()
 
+
 async def start_notes(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer(
@@ -31,7 +31,7 @@ async def start_notes(message: types.Message, state: FSMContext):
         )
     )
 
-# ▶ Старт добавления заметки
+
 async def start_add_note(message: types.Message, state: FSMContext):
     if message.text.lower() != "добавить заметку":
         return
@@ -62,14 +62,12 @@ async def start_add_note(message: types.Message, state: FSMContext):
     await state.set_state(NoteStates.waiting_pet)
 
 
-# ▶ Выбор питомца
 async def note_choose_pet(message: types.Message, state: FSMContext):
     await state.update_data(pet_name=message.text.strip())
-    await message.answer("Введите название заметки:",  reply_markup=types.ReplyKeyboardRemove())
+    await message.answer("Введите название заметки:", reply_markup=types.ReplyKeyboardRemove())
     await state.set_state(NoteStates.waiting_title)
 
 
-# ▶ Название
 async def note_title(message: types.Message, state: FSMContext):
     title = message.text.strip()
     if not title:
@@ -80,7 +78,6 @@ async def note_title(message: types.Message, state: FSMContext):
     await state.set_state(NoteStates.waiting_period)
 
 
-# ▶ Период
 async def note_period(message: types.Message, state: FSMContext):
     valid = {"Не повторять", "6 ч", "День", "Неделя", "Месяц", "Год"}
     if message.text not in valid:
@@ -91,7 +88,6 @@ async def note_period(message: types.Message, state: FSMContext):
     await state.set_state(NoteStates.waiting_extra)
 
 
-# ▶ Доп. информация
 async def note_extra(message: types.Message, state: FSMContext):
     extra = message.text.strip()
     if extra.lower() == "нет":
@@ -114,7 +110,6 @@ async def note_extra(message: types.Message, state: FSMContext):
     await state.set_state(NoteStates.confirm)
 
 
-# ▶ Подтверждение
 async def note_confirm(message: types.Message, state: FSMContext):
     text = message.text.lower()
 

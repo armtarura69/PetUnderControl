@@ -4,6 +4,7 @@ from datetime import datetime
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -13,6 +14,7 @@ class User(Base):
 
     pets = relationship("Pet", back_populates="owner", cascade="all, delete-orphan")
 
+
 class Pet(Base):
     __tablename__ = "pets"
     __table_args__ = (
@@ -21,14 +23,15 @@ class Pet(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    breed = Column(String, nullable=False)        # порода
-    name = Column(String, nullable=False)         # кличка (unique per user via constraint)
+    breed = Column(String, nullable=False)  # порода
+    name = Column(String, nullable=False)  # кличка (unique per user via constraint)
     age = Column(String, nullable=False)
     extra_info = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     owner = relationship("User", back_populates="pets")
     notes = relationship("Note", back_populates="pet", cascade="all, delete-orphan")
+
 
 class Note(Base):
     __tablename__ = "notes"

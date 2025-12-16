@@ -10,7 +10,6 @@ async def on_text_profile(message: types.Message):
     if text == "профиль":
         await message.answer("Выберите нужную вам функцию:", reply_markup=profile_options_keyboard())
     elif text == "посмотреть профиль":
-        # получить пользователя и его питомцев
         user_resp = await dbreq.get_user_by_telegram(message.from_user.id)
         if user_resp["status"] != "ok":
             await message.answer("Ошибка: " + user_resp.get("error_msg", "user not found"))
@@ -26,7 +25,6 @@ async def on_text_profile(message: types.Message):
             await message.answer("Пока нет животных", reply_markup=back_to_main_keyboard())
             return
 
-        # формируем вывод
         text_out = ""
         for p in pets:
             text_out += (
@@ -38,7 +36,6 @@ async def on_text_profile(message: types.Message):
                 f"Создан: {p['created_at']}\n"
             )
 
-            # получаем заметки
             notes_resp = await dbreq.list_notes_for_pet(p["id"])
             if notes_resp["status"] == "ok" and notes_resp["data"]["notes"]:
                 text_out += "📌 Заметки:\n"

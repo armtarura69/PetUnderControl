@@ -1,4 +1,3 @@
-# keyboards/main_keyboards.py
 from aiogram import types
 
 
@@ -21,7 +20,6 @@ def back_to_main_keyboard() -> types.ReplyKeyboardMarkup:
         resize_keyboard=True
     )
     return kb
-
 
 
 def profile_options_keyboard() -> types.ReplyKeyboardMarkup:

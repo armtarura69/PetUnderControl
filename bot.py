@@ -1,4 +1,3 @@
-# bot.py
 import logging
 import asyncio
 from aiogram import Bot, Dispatcher, types
@@ -42,20 +41,13 @@ if not BOT_TOKEN:
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 
-# Инициализация БД
 init_db()
 
-# --- РЕГИСТРАЦИЯ ХЕНДЛЕРОВ ---
-
-# 1. Сначала регистрируем команды
 dp.message.register(cmd_start, Command(commands=["start"]))
 dp.message.register(cmd_inline, Command(commands=["inline"]))
 
-# 2. Затем конкретные текстовые команды (Flow добавления питомца)
-# ...
 dp.message.register(note_extra, notes_flow.NoteStates.waiting_extra, F.text)
 
-# ГЛОБАЛЬНАЯ ОТМЕНА
 dp.message.register(
     cancel_handler,
     F.text.casefold() == "на главную",
@@ -66,14 +58,12 @@ dp.message.register(
     start_add_pet,
     F.text.lower() == "добавить питомца"
 )
-# Состояния передаем позиционно, без "state=". F.text заменяет content_types
 dp.message.register(pet_breed, pet_flow.PetStates.waiting_breed, F.text)
 dp.message.register(pet_name, pet_flow.PetStates.waiting_name, F.text)
 dp.message.register(pet_age, pet_flow.PetStates.waiting_age, F.text)
 dp.message.register(pet_extra, pet_flow.PetStates.waiting_extra, F.text)
 dp.message.register(pet_confirm, pet_flow.PetStates.confirm, F.text)
 
-# 3. Flow редактирования питомца
 dp.message.register(
     start_edit_pet,
     F.text.lower() == "изменить информацию о питомце"
@@ -82,14 +72,10 @@ dp.message.register(choose_pet_to_edit, pet_flow.EditPetStates.waiting_choose_pe
 dp.message.register(field_choice, pet_flow.EditPetStates.waiting_field_choice, F.text)
 dp.message.register(new_value_input, pet_flow.EditPetStates.waiting_new_value, F.text)
 
-
-# ГЛОБАЛЬНЫЕ КНОПКИ
 dp.message.register(start_notes, F.text.casefold() == "заметки", StateFilter("*"))
 dp.message.register(start_add_pet, F.text.casefold() == "добавить питомца", StateFilter("*"))
 dp.message.register(start_edit_pet, F.text.casefold() == "изменить информацию о питомце", StateFilter("*"))
 
-
-# FSM заметок
 dp.message.register(start_add_note, F.text.casefold() == "добавить заметку")
 dp.message.register(note_choose_pet, NoteStates.waiting_pet, F.text)
 dp.message.register(note_title, NoteStates.waiting_title, F.text)
@@ -102,8 +88,6 @@ dp.message.register(
     StateFilter("*")
 )
 
-# 5. В САМОМ КОНЦЕ регистрируем общий обработчик текста
-# Если поставить его выше, он будет перехватывать команды "добавить питомца" и т.д.
 dp.message.register(on_text_profile, F.text)
 
 async def main():

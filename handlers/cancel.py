@@ -1,7 +1,7 @@
-# handlers/cancel.py
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 from keyboards.main_keyboards import main_reply_keyboard
+
 
 async def cancel_handler(message: types.Message, state: FSMContext):
     await state.clear()

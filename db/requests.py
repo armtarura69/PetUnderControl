@@ -6,7 +6,6 @@ from utils.helpers import make_response_ok, make_response_error
 from datetime import datetime
 import asyncio
 
-# sync SQLAlchemy engine, allow threads for sqlite
 engine = create_engine(DB_PATH, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
@@ -15,7 +14,6 @@ def init_db():
     Base.metadata.create_all(bind=engine)
 
 
-# --- CRUD (sync) ---
 def get_or_create_user_sync(telegram_id: int):
     session = SessionLocal()
     try:
@@ -70,7 +68,6 @@ def create_pet_sync(user_id: int, breed: str, name: str, age: str, extra_info: s
         return make_response_error("Обязательные поля для питомца не заполнены (breed, name, age).")
     session = SessionLocal()
     try:
-        # проверка дубликата (имя для пользователя)
         exists = session.query(Pet).filter_by(user_id=user_id, name=name).first()
         if exists:
             return make_response_error("Питомец с такой кличкой уже существует.")
@@ -116,7 +113,6 @@ def update_pet_field_sync(pet_id: int, field: str, value: str):
         pet = session.query(Pet).get(pet_id)
         if not pet:
             return make_response_error("Питомец не найден")
-        # если меняем имя — проверить дубликат в рамках пользователя
         if field == "name":
             conflict = session.query(Pet).filter(Pet.user_id == pet.user_id, Pet.name == value,
                                                  Pet.id != pet.id).first()
@@ -135,7 +131,6 @@ def update_pet_field_sync(pet_id: int, field: str, value: str):
         session.close()
 
 
-# Notes
 def list_notes_for_pet_sync(pet_id: int):
     session = SessionLocal()
     try:
@@ -222,7 +217,6 @@ def update_note_field_sync(note_id: int, field: str, value: str):
         session.close()
 
 
-# --- Async wrappers (использовать в хендлерах) ---
 async def get_or_create_user(telegram_id: int):
     return await asyncio.to_thread(get_or_create_user_sync, telegram_id)
 

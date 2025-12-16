@@ -1,4 +1,3 @@
-# handlers/start_inline.py
 from aiogram import types
 from db import requests as dbreq
 from keyboards.main_keyboards import main_reply_keyboard
@@ -6,7 +5,6 @@ from utils.helpers import make_response_ok
 
 
 async def cmd_start(message: types.Message):
-    # создать профиль пользователя, если нет
     resp = await dbreq.get_or_create_user(message.from_user.id)
     if resp["status"] == "ok":
         await message.answer(
@@ -18,15 +16,12 @@ async def cmd_start(message: types.Message):
 
 
 async def cmd_inline(message: types.Message):
-    # отправляем ссылки (пример формата JSON-ответа)
     inline_links = [
         {"title": "Документация по кошкам", "url": "https://example.com/cats"},
         {"title": "Документация по собаками", "url": "https://example.com/dogs"},
     ]
-    # также отправим inline-клавиатуру с ссылками
     kb = types.InlineKeyboardMarkup()
     for link in inline_links:
         kb.add(types.InlineKeyboardButton(text=link["title"], url=link["url"]))
     await message.answer("Полезные ссылки:", reply_markup=kb)
-    # отдаём JSON-структуру (для логики/тестов)
     await message.answer(str({"inline_links": inline_links}))
